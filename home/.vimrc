@@ -7,7 +7,7 @@ call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, required
+"let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
 " The following are examples of different formats supported.
@@ -56,7 +56,6 @@ set linebreak
 set noswapfile
 set encoding=utf-8 " Кодировка файлов по умолчанию
 set cursorline
-colorscheme pyte 
 
 nnoremap <Leader>c :set cursorcolumn!<CR>
 
@@ -66,6 +65,7 @@ filetype  indent on
 let mapleader = ","
 let python_highlight_all = 1
 set t_Co=256 " ставим 256 цветов для иксовых терминалов
+colorscheme pyte
 "Настройка omnicompletion для Python (а так же для js, html and css)
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
@@ -95,15 +95,23 @@ set completeopt=menuone,menu,longest,preview
 
 "Авто комплит по табу
 "
-function! Tab_Or_Complete()
-  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-    return "\<C-N>"
-  else
-    return "\<Tab>"
-  endif
-endfunction
-:inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
-:set dictionary="/usr/dict/words"
+"function! Tab_Or_Complete()
+"  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+"    return "\<C-N>"
+"  else
+"    return "\<Tab>"
+"  endif
+"endfunction
+":inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
+":set dictionary="/usr/dict/words"
+
+"function! CompleteBrackets()
+    "if strpart(getline('.'), col('.') + 2, 2) =~ '('
+        "return
+    "endif
+"endfunction
+
+"imap [ <C-R>=CompleteBrackets()<CR>
 
 
 imap <C-u> <esc>:edit!<CR>
@@ -206,6 +214,15 @@ noremap ,p :tabp<CR>
 noremap ,t :tabnew<CR>
 "______________________________________________________________
 
+"Walking Around Your Buffers
+" Next buffer
+nmap ,l :bnext<CR>
+" Previous buffer
+nmap ,h :bprevious<CR>
+" Close the current buffer and move to the previous one
+nmap ,bq :bp <BAR> bd #<CR>
+" Show all open buffers and their status
+nmap ,bl :ls<CR>
 " Русская раскладка клавиатуры
   map ё `
   map й q
@@ -281,5 +298,10 @@ menu Encoding.utf-8 :e ++enc=utf8 <CR>
 menu Encoding.windows-1251 :e ++enc=cp1251<CR>
 menu Encoding.koi8-r :e ++enc=koi8-r<CR>
 menu Encoding.cp866 :e ++enc=cp866<CR>
-map <C-F5> :emenu Encoding.<TAB> 
+map <C-F5> :emenu Encoding.<TAB>
+" Make < and > shifts keep selection
+vnoremap < <gv
+vnoremap > >gv
+" Insert new line without switching to insert mode
+nnoremap <C-J> a<CR><Esc>k$
 cmap w!! w !sudo tee > /dev/null %
