@@ -114,8 +114,8 @@ set completeopt=menuone,menu,longest,preview
 "imap [ <C-R>=CompleteBrackets()<CR>
 
 
-imap <C-u> <esc>:edit!<CR>
-nmap <C-u> :edit!<CR>
+"imap <C-u> <esc>:edit!<CR>
+"nmap <C-u> :edit!<CR>
 
 " показываем все полезные опции автокомплита сразу
 "set complete=""
@@ -216,9 +216,9 @@ noremap ,t :tabnew<CR>
 
 "Walking Around Your Buffers
 " Next buffer
-nmap ,l :bnext<CR>
+"nmap ,l :bnext<CR>
 " Previous buffer
-nmap ,h :bprevious<CR>
+"nmap ,h :bprevious<CR>
 " Close the current buffer and move to the previous one
 nmap ,bq :bp <BAR> bd #<CR>
 " Show all open buffers and their status
@@ -305,3 +305,4 @@ vnoremap > >gv
 " Insert new line without switching to insert mode
 nnoremap <C-J> a<CR><Esc>k$
 cmap w!! w !sudo tee > /dev/null %
+nmap - A;<Esc>
