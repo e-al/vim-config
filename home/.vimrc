@@ -245,7 +245,6 @@ noremap ,t :tabnew<CR>
 "Walking Around Your Buffers
 " Next buffer
 "nmap ,l :bnext<CR>
-"" Previous buffer
 "nmap ,h :bprevious<CR>
 " Close the current buffer and move to the previous one
 nmap ,bq :bp <BAR> bd #<CR>
