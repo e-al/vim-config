@@ -16,6 +16,8 @@ Plugin 'gmarik/Vundle.vim'
 "Plugin 'tpope/vim-fugitive'
 Plugin 'bling/vim-airline'
 Plugin 'Auto-Pairs'
+Plugin 'clang_complete'
+Plugin 'xuhdev/vim-latex-live-preview'
 "" plugin from http://vim-scripts.org/vim/scripts.html
 "Plugin 'L9'
 "" Git plugin not hosted on GitHub
@@ -73,25 +75,51 @@ autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 
 " configure tags - add additional tags here or comment out not-used ones
-set tags+=~/.vim/tags/cpp
+"set tags+=~/.vim/tags/cpp
 "set tags+=~/.vim/tags/gl
 "set tags+=~/.vim/tags/sdl
 "set tags+=~/.vim/tags/qt4
 " build tags of your own project with Ctrl-F12
-map <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+"map <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+"
+" CLang autocomplete
+let g:clang_use_library = 1
+" if there's an error, allow us to see it
+let g:clang_complete_copen=1
+let g:clang_complete_macros=1
+let g:clang_complete_patterns=0
+" Limit memory use
+let g:clang_memory_percent=70
+let b:clang_user_options = '-std=c++11 || exit 0'
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabContextDefaultCompletionType = '<c-x><c-u>'
+" Set this to 0 if you don't want autoselect, 1 if you want autohighlight,
+" and 2 if you want autoselect. 0 will make you arrow down to select the first
+" option, 1 will select the first option for you, but won't insert it unless you
+" press enter. 2 will automatically insert what it thinks is right. 1 is the most
+" convenient IMO, and it defaults to 0.
+let g:clang_auto_select=1
+"let g:clang_complete_auto = 1
+
+set conceallevel=2
+set concealcursor=vin
+let g:clang_snippets=1
+let g:clang_conceal_snippets=1
+" The single one that works with clang_complete
+let g:clang_snippets_engine='clang_complete'
 
 " OmniCppComplete
-let OmniCpp_NamespaceSearch = 1
-let OmniCpp_GlobalScopeSearch = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
-let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
-let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
-let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+"let OmniCpp_NamespaceSearch = 1
+"let OmniCpp_GlobalScopeSearch = 1
+"let OmniCpp_ShowAccess = 1
+"let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
+"let OmniCpp_MayCompleteDot = 1 " autocomplete after .
+"let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
+"let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
+"let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 " automatically open and close the popup menu / preview window
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-set completeopt=menuone,menu,longest,preview
+"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+"set completeopt=menuone,menu,longest,preview
 
 "Авто комплит по табу
 "
@@ -114,8 +142,8 @@ set completeopt=menuone,menu,longest,preview
 "imap [ <C-R>=CompleteBrackets()<CR>
 
 
-imap <C-u> <esc>:edit!<CR>
-nmap <C-u> :edit!<CR>
+"imap <C-u> <esc>:edit!<CR>
+"nmap <C-u> :edit!<CR>
 
 " показываем все полезные опции автокомплита сразу
 "set complete=""
@@ -152,10 +180,10 @@ nmap <F3> :NERDTreeToggle<CR>
 
 " C__________________________________________________________________
 
-nmap <F8> :w\|!gcc -o %.out % -lm<CR>
+nmap <F8> :w\|!g++ -o %.out % -lm<CR>
 imap <F8> <ESC>:w\|!gcc -o %.out %<CR>
-nmap <F5> :!./%.out<CR>
-imap <F5> <ESC>:!./%.out<CR>
+nmap <F5> :!%.out<CR>
+imap <F5> <ESC>:!%.out<CR>
 nmap <F10> :qa<CR>
 imap <F10> <ESC>:qa<CR>
 " ___________________________________________________________________
@@ -204,11 +232,11 @@ noremap  ,mh H<CR>
 " Move the current window to the bottom of the main Vim window
 noremap  ,mj J<CR>
 
-" Next tab
-noremap ,n :tabn<CR>
+" Next buffer
+noremap ,n :bnext<CR>
 
-" Previous tab
-noremap ,p :tabp<CR>
+" Previous buffer
+noremap ,p :bprevious<CR>
 
 " New tab
 noremap ,t :tabnew<CR>
@@ -216,9 +244,9 @@ noremap ,t :tabnew<CR>
 
 "Walking Around Your Buffers
 " Next buffer
-nmap ,l :bnext<CR>
-" Previous buffer
-nmap ,h :bprevious<CR>
+"nmap ,l :bnext<CR>
+"" Previous buffer
+"nmap ,h :bprevious<CR>
 " Close the current buffer and move to the previous one
 nmap ,bq :bp <BAR> bd #<CR>
 " Show all open buffers and their status
@@ -305,3 +333,4 @@ vnoremap > >gv
 " Insert new line without switching to insert mode
 nnoremap <C-J> a<CR><Esc>k$
 cmap w!! w !sudo tee > /dev/null %
+nnoremap - A;<Esc>
