@@ -16,8 +16,16 @@ Plugin 'gmarik/Vundle.vim'
 "Plugin 'tpope/vim-fugitive'
 Plugin 'bling/vim-airline'
 Plugin 'Auto-Pairs'
-Plugin 'clang_complete'
 Plugin 'xuhdev/vim-latex-live-preview'
+Plugin 'pyte'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'qpkorr/vim-bufkill'
+Plugin 'fatih/vim-go'
+Plugin 'majutsushi/tagbar'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'vim-arduino'
 "" plugin from http://vim-scripts.org/vim/scripts.html
 "Plugin 'L9'
 "" Git plugin not hosted on GitHub
@@ -64,42 +72,12 @@ nnoremap <Leader>c :set cursorcolumn!<CR>
 filetype plugin on
 filetype  indent on
 
-let mapleader = ","
+"nnoremap <SPACE> <Nop>
+let mapleader=' '
+"map <SPACE> <leader>
 let python_highlight_all = 1
 set t_Co=256 " ставим 256 цветов для иксовых терминалов
 colorscheme pyte
-"Настройка omnicompletion для Python (а так же для js, html and css)
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-
-" configure tags - add additional tags here or comment out not-used ones
-"set tags+=~/.vim/tags/cpp
-"set tags+=~/.vim/tags/gl
-"set tags+=~/.vim/tags/sdl
-"set tags+=~/.vim/tags/qt4
-" build tags of your own project with Ctrl-F12
-"map <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-"
-" CLang autocomplete
-let g:clang_use_library = 1
-" if there's an error, allow us to see it
-let g:clang_complete_copen=1
-let g:clang_complete_macros=1
-let g:clang_complete_patterns=0
-" Limit memory use
-let g:clang_memory_percent=70
-let b:clang_user_options = '-std=c++11 || exit 0'
-let g:SuperTabDefaultCompletionType = 'context'
-let g:SuperTabContextDefaultCompletionType = '<c-x><c-u>'
-" Set this to 0 if you don't want autoselect, 1 if you want autohighlight,
-" and 2 if you want autoselect. 0 will make you arrow down to select the first
-" option, 1 will select the first option for you, but won't insert it unless you
-" press enter. 2 will automatically insert what it thinks is right. 1 is the most
-" convenient IMO, and it defaults to 0.
-let g:clang_auto_select=1
-"let g:clang_complete_auto = 1
 
 set conceallevel=2
 set concealcursor=vin
@@ -107,68 +85,6 @@ let g:clang_snippets=1
 let g:clang_conceal_snippets=1
 " The single one that works with clang_complete
 let g:clang_snippets_engine='clang_complete'
-
-" OmniCppComplete
-"let OmniCpp_NamespaceSearch = 1
-"let OmniCpp_GlobalScopeSearch = 1
-"let OmniCpp_ShowAccess = 1
-"let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
-"let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-"let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
-"let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
-"let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-" automatically open and close the popup menu / preview window
-"au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-"set completeopt=menuone,menu,longest,preview
-
-"Авто комплит по табу
-"
-"function! Tab_Or_Complete()
-"  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-"    return "\<C-N>"
-"  else
-"    return "\<Tab>"
-"  endif
-"endfunction
-":inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
-":set dictionary="/usr/dict/words"
-
-"function! CompleteBrackets()
-    "if strpart(getline('.'), col('.') + 2, 2) =~ '('
-        "return
-    "endif
-"endfunction
-
-"imap [ <C-R>=CompleteBrackets()<CR>
-
-
-"imap <C-u> <esc>:edit!<CR>
-"nmap <C-u> :edit!<CR>
-
-" показываем все полезные опции автокомплита сразу
-"set complete=""
-"set complete+=.
-"set complete+=k
-"set complete+=b
-"set complete+=t
-
-" Перед сохранением выразем пробелы на концах (только в .py файлах)
-"autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
-" В .py файлах включаем умные отступы после ключевых слов
-"autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-
-" Копи/паст по Ctrl+C/Ctrl+V
-"vmap <C-c> "+yyi
-"imap <C-V> <esc>"+gPi
-" Установим статусную строку
-"fun! <SID>SetStatusLine()
-    "let l:s1="%-3.3n\\ %f\\ %h%m%r%w"
-    "let l:s2="[%{strlen(&filetype)?&filetype:'?'},%{&encoding},%{&fileformat}]"
-    "let l:s3="%=\\ 0x%-8B\\ \\ %-14.(%l,%c%V%)\\ %<%P"
-    "execute "set statusline=" . l:s1 . l:s2 . l:s3
-"endfun
-"set laststatus=2
-"call <SID>SetStatusLine()
 
 nmap <F9> :TlistOpen<CR>
 imap <F9> <ESC>:TlistOpen<CR>
@@ -178,10 +94,10 @@ nmap <C-F10> :q!<CR>
 imap <C-F10> <ESC>:q!<CR>
 nmap <F3> :NERDTreeToggle<CR>
 
-" C__________________________________________________________________
+" C++__________________________________________________________________
 
-nmap <F8> :w\|!g++ -o %.out % -lm<CR>
-imap <F8> <ESC>:w\|!gcc -o %.out %<CR>
+nmap <F8> :w\|!g++ -o %.out % -lm -std=c++11<CR>
+imap <F8> <ESC>:w\|!g++ -o %.out % -lm -std=c++11<CR>
 nmap <F5> :!%.out<CR>
 imap <F5> <ESC>:!%.out<CR>
 nmap <F10> :qa<CR>
@@ -192,54 +108,56 @@ imap <F10> <ESC>:qa<CR>
 
 " map control-backspace to delete the previous word
 :imap <C-BackSpace> <C-W>
+" Split the window vertically and move to it
+nnoremap <Leader><CR> :exe "vs"<CR><C-w>l
 
 " Move the cursor to the window left of the current one
-noremap  ,h :wincmd h<CR>
+noremap  <leader>h :wincmd h<CR>
 
 " Move the cursor to the window below the current one
-noremap  ,j :wincmd j<CR>
+noremap  <leader>j :wincmd j<CR>
 
 " Move the cursor to the window above the current one
-noremap  ,k :wincmd k<CR>
+noremap  <leader>k :wincmd k<CR>
 
 " Move the cursor to the window right of the current one
-noremap  ,l :wincmd l<CR>
+noremap  <leader>l :wincmd l<CR>
 
 " Close the window below this one
-noremap  ,xj :wincmd j:close<CR>
+noremap  <leader>xj :wincmd j:close<CR>
 
 " Close the window above this one
-noremap  ,xk :wincmd k:close<CR>
+noremap  <leader>xk :wincmd k:close<CR>
 
 " Close the window to the left of this one
-noremap  ,xh :wincmd h:close<CR>
+noremap  <leader>xh :wincmd h:close<CR>
 
 " Close the window to the right of this one
-noremap  ,xl :wincmd l:close<CR>
+noremap  <leader>xl :wincmd l:close<CR>
 
 " Close the current window
-noremap  ,xc :close<CR>
+noremap  <leader>xc :close<CR>
 
 " Move the current window to the right of the main Vim window
-noremap  ,ml L<CR>
+noremap  <leader>ml <C-W>L<CR>
 
 " Move the current window to the top of the main Vim window
-noremap  ,mk K<CR>
+noremap  <leader>mk <C-W>K<CR>
 
 " Move the current window to the left of the main Vim window
-noremap  ,mh H<CR>
+noremap  <leader>mh <C-W>H<CR>
 
 " Move the current window to the bottom of the main Vim window
-noremap  ,mj J<CR>
+noremap  <leader>mj <C-W>J<CR>
 
 " Next buffer
-noremap ,n :bnext<CR>
+noremap <leader>n :bnext<CR>
 
 " Previous buffer
-noremap ,p :bprevious<CR>
+noremap <leader>p :bprevious<CR>
 
 " New tab
-noremap ,t :tabnew<CR>
+noremap <leader>t :tabnew<CR>
 "______________________________________________________________
 
 "Walking Around Your Buffers
@@ -247,9 +165,10 @@ noremap ,t :tabnew<CR>
 "nmap ,l :bnext<CR>
 "nmap ,h :bprevious<CR>
 " Close the current buffer and move to the previous one
-nmap ,bq :bp <BAR> bd #<CR>
+nmap <leader>bq :bp <BAR> bd #<CR>
 " Show all open buffers and their status
-nmap ,bl :ls<CR>
+nmap <leader>bl :ls<CR>
+
 " Русская раскладка клавиатуры
   map ё `
   map й q
@@ -333,3 +252,23 @@ vnoremap > >gv
 nnoremap <C-J> a<CR><Esc>k$
 cmap w!! w !sudo tee > /dev/null %
 nnoremap - A;<Esc>
+nnoremap <C-A> r-<Esc>li>
+
+let g:ycm_server_python_interpreter = '/usr/bin/python'
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+
+" Open the help in current buffer
+command! -nargs=1 -complete=help H :enew | :set buftype=help | :h <args>;
+
+
+" Tagbar settings
+" Open tagbar
+nmap <F4> :TagbarToggle<CR>
+imap <F4> <ESC>:TagbarToggle<CR>
+
+nmap <leader><leader> V
+
+" Resize your windows
+nnoremap <silent> <Leader>+ :exe "resize +5"<CR>
+nnoremap <silent> <Leader>- :exe "resize -5"<CR>
+
